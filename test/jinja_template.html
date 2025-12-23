@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <style>
+        body {
+            font-family: "Pretendard","Malgun Gothic", sans-serif;
+            padding: 40px;
+            color: #1a1a1a;
+        }
+        h1 {
+            font-size: 28px;
+            margin-bottom: 4px;
+            color: #0057d9;
+            font-weight: 700;
+        }
+        .sub-date {
+            font-size: 14px;
+            margin-bottom: 30px;
+            color: #666;
+        }
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-top: 40px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        .section-title img {
+            width: 24px;
+            margin-right: 8px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 15px;
+            margin-bottom: 35px;
+        }
+        thead {
+            background: #f3f6fb;
+        }
+        th, td {
+            padding: 10px 12px;
+            border: 1px solid #e4e6e9;
+        }
+        th {
+            font-weight: 700;
+            text-align: left;
+            color: #333;
+        }
+        .increase {
+            color: #11845b;
+            font-weight: 700;
+        }
+        .decrease {
+            color: #c62828;
+            font-weight: 700;
+        }
+        .arrow-up::after {
+            content: " ▲";
+        }
+        .arrow-down::after {
+            content: " ▼";
+        }
+        .category-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: #0a4ea3;
+            margin: 18px 0 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 제목 -->
+    <h1>온라인 일일 여론 종합</h1>
+    <div class="sub-date">
+        {{ report_date }} · LLM 자동 생성 보고서
+    </div>
+
+    <!-- 섹션 제목 -->
+    <div class="section-title">
+        <img src="{{ icon_today }}" />
+        오늘의 주요 토픽 및 언급량
+    </div>
+
+    <!-- 뉴스 토픽 블록 -->
+    <div class="category-title">▶ 뉴스 토픽 (정책여론수렴시스템 기준)</div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>이슈</th>
+                <th>언급량</th>
+                <th>전일 대비</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in news_topics %}
+            <tr>
+                <td>{{ item.issue }}</td>
+                <td>{{ item.volume }}</td>
+
+                {% set diff = item.diff %}
+                <td>
+                    {% if diff > 0 %}
+                        <span class="increase arrow-up">+{{ diff }}</span>
+                    {% elif diff < 0 %}
+                        <span class="decrease arrow-down">{{ diff }}</span>
+                    {% else %}
+                        <span>{{ diff }}</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- SNS 키워드 블록 -->
+    <div class="category-title">▶ SNS 키워드 (커뮤니티/유튜브)</div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>이슈</th>
+                <th>언급량</th>
+                <th>증가량</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in sns_topics %}
+            <tr>
+                <td>{{ item.issue }}</td>
+                <td>{{ item.volume }}</td>
+
+                {% set diff = item.diff %}
+                <td>
+                    {% if diff > 0 %}
+                        <span class="increase arrow-up">+{{ diff }}</span>
+                    {% elif diff < 0 %}
+                        <span class="decrease arrow-down">{{ diff }}</span>
+                    {% else %}
+                        <span>{{ diff }}</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</body>
+</html>

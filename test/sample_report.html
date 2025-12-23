@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLM 기반 일일 정책 여론 종합 보고서 (최종 완성본)</title>
+    <!-- Tailwind CSS 로드 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Tailwind Configuration
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'NanumGothic', 'sans-serif'],
+                    },
+                    colors: {
+                        'wise-blue': '#1034a6',
+                        'wise-green': '#10b981',
+                        'bg-light': '#f5f7fa',
+                        'header-bg': '#e6f0ff',
+                        'summary-bg': '#f9fafb',
+                        'news-positive': '#22c55e',
+                        'news-negative': '#ef4444',
+                        'social-positive': '#6366f1',
+                        'social-negative': '#f97316',
+                    }
+                }
+            }
+        }
+        // 동적 기능 제거로 인해 모든 JavaScript 로직 제거
+
+    </script>
+    <style>
+        /* 세로형 슬라이드 및 보고서 컨테이너 스타일 */
+        .report-slide {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.15);
+            padding: 40px 60px;
+            width: 800px; /* 세로형 PPT 폭 */
+            min-height: 1050px; /* 세로형 PPT 높이 */
+            margin: 0 auto;
+        }
+        .report-table th, .report-table td {
+            padding: 8px 12px;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 0.875rem;
+        }
+        .report-table th {
+            background-color: #f9fafb;
+            font-weight: 600;
+            color: #1f2937;
+            text-align: left;
+        }
+        /* 감성 비교 시각화 스타일 */
+        .sentiment-bar-container {
+            height: 120px;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: #f9fafb;
+        }
+        .sentiment-bar {
+            height: 20px;
+            border-radius: 4px;
+            margin-bottom: 6px;
+            display: flex;
+            overflow: hidden;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .positive-segment { height: 100%; }
+        .negative-segment { height: 100%; }
+        .neutral-segment { height: 100%; background-color: #9ca3af; }
+
+        .data-header {
+            font-size: 0.75rem;
+            color: #4b5563;
+        }
+    </style>
+</head>
+<body class="bg-bg-light p-10 font-sans">
+
+    <div class="report-slide">
+        
+        <!-- 1. 보고서 헤더 및 제목 -->
+        <header class="pb-4 mb-6 border-b-4 border-wise-blue">
+            <div class="flex justify-between items-end">
+                <h1 class="text-3xl font-extrabold text-wise-blue">온라인 일일 여론 종합</h1>
+                <p class="text-base font-semibold text-gray-700">문화체육관광부 | 2025. 11. 17. (월)</p>
+            </div>
+        </header>
+
+        <!-- 핵심 1단 레이아웃 (LLM 통합) -->
+        <div class="space-y-8">
+            
+            <!-- ====== TOP 이슈 요약 및 매체별 이슈 (기존 상단 구조 반영) ====== -->
+            <section>
+                <h2 class="text-xl font-bold text-gray-800 mb-4 border-l-4 border-wise-green pl-2">오늘의 TOP3 정책 이슈</h2>
+                
+                <!-- TOP 이슈 요약 (언급량 및 증감량 파악) -->
+                <div class="grid grid-cols-3 gap-4 mb-6 text-center">
+                    <div class="p-4 bg-wise-blue/5 rounded-lg border-b-2 border-wise-blue">
+                        <p class="data-header">정책 이슈 1 (환율)</p>
+                        <p class="text-lg font-bold text-gray-800">환율 등 글로벌 경제</p>
+                        <p class="text-xs text-gray-600">언급량 1,284건 (<span class="text-red-600">▲616</span>)</p>
+                    </div>
+                    <div class="p-4 bg-wise-blue/5 rounded-lg border-b-2 border-wise-blue">
+                        <p class="data-header">정책 이슈 2</p>
+                        <p class="text-lg font-bold text-gray-800">새벽배송 제한 논란</p>
+                        <p class="text-xs text-gray-600">언급량 271건 (<span class="text-green-600">▲4</span>)</p>
+                    </div>
+                    <div class="p-4 bg-wise-blue/5 rounded-lg border-b-2 border-wise-blue">
+                        <p class="data-header">정책 이슈 3</p>
+                        <p class="text-lg font-bold text-gray-800">전동킥보드 단속</p>
+                        <p class="text-xs text-gray-600">언급량 160건 (<span class="text-red-600">▼69</span>)</p>
+                    </div>
+                </div>
+
+                <!-- 매체별 TOP 이슈 (하이퍼링크 및 관심도) -->
+                <h2 class="text-xl font-bold text-gray-800 mb-3 border-l-4 border-wise-green pl-2">매체별 TOP 이슈 (하이퍼링크 및 관심도)</h2>
+                <div class="p-4 border border-gray-200 rounded-lg bg-summary-bg text-sm">
+                    <p class="font-bold text-wise-blue mb-2">NEWS (최다댓글)</p>
+                    <p class="text-gray-700 mb-3">○ [조선일보] 李대통령 "통신보안 잘 됩니까?" 시진핑 "뒷문 있나 보세요" (댓글 704건)</p>
+                    <p class="font-bold text-wise-blue mb-2">COMMUNITY (최다조회)</p>
+                    <p class="text-gray-700 mb-3">○ [인스티즈] 어제 apec정상회담 레전드 장면 ㅋㅋ (조회수 91,050회)</p>
+                    <p class="font-bold text-wise-blue mb-2">YOUTUBE (최다조회)</p>
+                    <p class="text-gray-700">○ [JTBC News] 시진핑 주석 마음이 '스르륵' 열린 순간...모두 '빵' 터졌다 (조회수 1,257,492회)</p>
+                </div>
+            </section>
+            
+            <!-- ====== 주요 이슈 소개 및 내용 요약 (LLM 통합 본문) ====== -->
+            <section>
+                <h2 class="text-xl font-bold text-gray-800 mb-3 border-l-4 border-wise-green pl-2">환율 등 글로벌 경제 (주요 이슈 소개 및 내용 요약)</h2>
+                
+                <!-- 1. LLM 자동 순화된 핵심 여론 요약 (어조 일관성 확보) -->
+                <!-- <div class="mb-4 p-4 border border-gray-200 rounded-lg bg-wise-blue/5">
+                    <div class="mb-2 pb-2 border-b border-gray-300">
+                         <p class="font-bold text-wise-blue text-lg">✅ LLM 자동 순화된 핵심 여론 요약 (중요도 상위 작성)</p>
+                    </div> -->
+                    
+                    <!-- LLM 순화 결과 표시 영역 (Hardcoded Final Result) -->
+                    <p id="llm-refined-summary" class="text-sm text-gray-700 leading-relaxed italic border-l-4 border-wise-blue pl-2">
+                        글로벌 금리 인상 가속화 우려로 인한 환율 급등세가 관찰되고 있으며, 이에 대한 국민적 불안감이 온라인 여론에서 강하게 표출되고 있습니다. 정부는 단기적 시장 개입 정책을 수행 중이나, 근본적인 물가 및 금융 안정화 대책에 대한 명확한 커뮤니케이션이 요구됩니다.
+                    </p>
+                    
+                    <!-- Reviewer Agent 품질 검증 (Hardcoded Final Result) -->
+                    <!-- <div class="flex justify-between items-center mt-3 pt-3 border-t border-gray-300">
+                        <span class="text-xs font-semibold text-gray-600">Reviewer Agent 품질 검증 및 신뢰도 점수</span>
+                        <span id="reviewer-score" class="text-xl font-extrabold text-wise-green">99/100</span>
+                    </div> -->
+                </div>
+
+                <!-- 원본 여론 (LLM 입력 텍스트) 및 기사/댓글 -->
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <!-- 주요 기사 영역 -->
+                    <div class="border p-3 rounded-lg bg-white shadow-sm">
+                        <p class="text-sm font-semibold mb-2 border-b pb-1">⚫️ 주요 기사 목록</p>
+                        <ul id="article-list" class="list-none text-sm text-gray-700 space-y-2 pl-0">
+                            <li class="flex items-start">
+                                <span class="text-wise-green mr-2 mt-1 flex-shrink-0">✓</span>
+                                <span>[서울] 1400원 턱밑 환율에도 표한 수 없는 정부</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-wise-green mr-2 mt-1 flex-shrink-0">✓</span>
+                                <span>[MBC] 미국발 '울트라 스텝' 우려에 한국도 출렁 - 한은 금리 얼마나 올릴까?</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- 댓글 여론 영역 -->
+                    <div class="border p-3 rounded-lg bg-white shadow-sm">
+                        <p class="text-sm font-semibold mb-2 border-b pb-1">⚫️ 여론을 대표하는 댓글</p>
+                        <ul id="raw-sentiment-list" class="list-none text-sm text-gray-700 space-y-2 pl-0">
+                            <li class="flex items-start">
+                                <span class="text-red-600 mr-2 mt-1 flex-shrink-0">▶</span>
+                                <span>"고금리와 고환율의 콜라보, 현재 상태로는 답이 없다"</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-red-600 mr-2 mt-1 flex-shrink-0">▶</span>
+                                <span>"금리 1%p 올려도 부족하다. 금융위기 오기 전에 선제적으로 대응해라"</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-red-600 mr-2 mt-1 flex-shrink-0">▶</span>
+                                <span>"미국이 올트라 스텝 운운하는데 한은 너무 소극적이다. 국민들 다 죽기 전 물가부터 잡아"</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 2. 연관어 및 감성연관어 비교 시각화 -->
+                <div class="grid grid-cols-2 gap-6 mb-4">
+                    <!-- 연관 키워드 표 (명시성 강화) -->
+                    <div class="p-3 bg-white rounded-lg border shadow-sm">
+                        <p class="text-sm font-semibold mb-2 border-b pb-1">주요 연관어 언급량 비교</p>
+                        <table class="w-full text-xs report-table">
+                            <thead>
+                                <tr class="bg-gray-100">
+                                    <th class="w-1/6">순위</th>
+                                    <th class="w-1/2">정책 연관어</th>
+                                    <th>언급량</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>1</td><td class="font-medium">환율</td><td>867건</td></tr>
+                                <tr><td>2</td><td class="font-medium">물가</td><td>854건</td></tr>
+                                <tr><td>3</td><td class="font-medium">금리</td><td>647건</td></tr>
+                                <tr><td>4</td><td class="font-medium">코스피</td><td>568건</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- 감성 연관어 시각화 (뉴스/소셜미디어 분리 막대 차트) -->
+                    <div class="p-3 bg-white rounded-lg border shadow-sm">
+                        <p class="text-sm font-semibold mb-2 border-b pb-1">뉴스 vs 소셜미디어 감성 연관어 시각화</p>
+                        <div class="sentiment-bar-container">
+                            <!-- 뉴스 감성 (긍정 40%, 부정 21%, 중립 39%) -->
+                            <p class="text-xs font-medium text-gray-700 mb-1">뉴스 (매체)</p>
+                            <div class="sentiment-bar">
+                                <div class="positive-segment bg-news-positive" style="width: 40%;" title="긍정 40%"></div>
+                                <div class="negative-segment bg-news-negative" style="width: 21%;" title="부정 21%"></div>
+                                <div class="neutral-segment" style="width: 39%;" title="중립 39%"></div>
+                            </div>
+                            <!-- 소셜미디어 감성 (긍정 39%, 부정 39%, 중립 22%) -->
+                            <p class="text-xs font-medium text-gray-700 mb-1">소셜미디어</p>
+                            <div class="sentiment-bar">
+                                <div class="positive-segment bg-social-positive" style="width: 39%;" title="긍정 39%"></div>
+                                <div class="negative-segment bg-social-negative" style="width: 39%;" title="부정 39%"></div>
+                                <div class="neutral-segment" style="width: 22%;" title="중립 22%"></div>
+                            </div>
+                        </div>
+                        <p class="text-xs text-red-600 mt-2 text-center font-medium">소셜미디어의 부정 감성(39%)이 뉴스(21%) 대비 극심한 양상을 보임.</p>
+                    </div>
+                </div>
+
+                <!-- 3. 정책 대응 가이드라인 (최종 통합) -->
+                <!-- <div class="p-4 bg-wise-green/10 rounded-xl border border-wise-green shadow-md">
+                    <div class="mb-3 pb-2 border-b border-wise-green/50">
+                        <h3 class="text-base font-extrabold text-gray-800 flex items-center">
+                            <svg class="w-5 h-5 mr-2 text-wise-green" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.62-.921 1.92 0l2.42 7.42c.16.495.63.847 1.15.847h7.88a1 1 0 01.62.62c.16.495-.01.99-.44 1.25l-6.32 4.6c-.36.26-.57.73-.44 1.25l2.42 7.42c.3.921-.73 1.62-1.55 1.18l-6.32-4.6c-.57-.41-1.3-.41-1.87 0l-6.32 4.6c-.82.44-1.85-.26-1.55-1.18l2.42-7.42c.13-.52-.08-.99-.44-1.25l-6.32-4.6c-.43-.26-.6-1.15-.44-1.25l7.88-.847c.52-.01.99-.35 1.15-.847l2.42-7.42z" clip-rule="evenodd" fill-rule="evenodd"></path></svg>
+                            정책 대응 가이드라인
+                        </h3>
+                    </div>
+                    
+                    <ul id="policy-guide-list" class="list-none space-y-2 pl-0 text-sm">-->
+                        <!-- Hardcoded Final Result -->
+                <!--        <li class="flex items-start">
+                            <span class="text-wise-green mr-2 mt-1 flex-shrink-0">•</span>
+                            <span><b>커뮤니케이션 전략:</b> '단순한 시장 안정 노력'보다 '국민 가계 안정화'에 초점을 맞춘 공감 기반 서술을 최우선으로 해야 합니다.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-wise-green mr-2 mt-1 flex-shrink-0">•</span>
+                            <span><b>민감어 관리:</b> '고금리', '고환율 쇼크' 등의 민감어 사용을 최소화하고, 이를 대체할 '점진적 안정화', '리스크 관리 강화' 등의 용어를 사용합니다.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-wise-green mr-2 mt-1 flex-shrink-0">•</span>
+                            <span><b>즉각적 대응 권고:</b> 정부의 정책 의도와 향후 계획을 담은 구체적인 Q&A 문답 자료를 배포하여 국민적 불안을 해소해야 합니다. (기관: 기획재정부, 금융위원회)</span>
+                        </li>
+                    </ul>
+                </div> -->
+                
+            </section>
+            
+        </div>
+
+        <!-- 보고서 푸터 -->
+        <footer class="mt-10 pt-4 border-t text-center text-xs text-gray-400">
+            문화체육관광부 | WISE NUT (LLM 자동 보고 체계)
+        </footer>
+    </div>
+</body>
+</html>

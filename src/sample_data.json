@@ -1,0 +1,52 @@
+{
+  "report_title": "온라인 일일 여론 종합",
+  "report_date": "2025-11-03",
+  "report_unit": "국민소통실",
+
+  "top_news_topics": [
+    {"issue": "한중 정상회담", "count": 1284, "diff": -616},
+    {"issue": "새벽배송 제한 논란", "count": 271, "diff": 4}
+  ],
+
+  "top_sns_keywords": [
+    {"issue": "APEC 정상회의", "count": 3626, "diff": -5549},
+    {"issue": "韓-엔비디아 AI 동맹", "count": 1950, "diff": -861}
+  ],
+
+  "media_top_issues": [
+    {"media_type": "NEWS", "title": "헬멧 없이 2명 탄 전동킥보드 단속", "metric": "댓글 953"},
+    {"media_type": "커뮤니티", "title": "새벽배송 금지 논란", "metric": "조회수 49,817"}
+  ],
+
+  "sections": [
+    {
+      "section_name": "대통령실",
+      "issues" : [
+        {
+          "issue" : "한중 정삼회담",
+          "issue_summary": "한중 정상, 양국 협력과 소통 발전 강조. 통화스와프 연장, 스캠 범죄 대응 공조로 긍정 반응 우세.",
+          "top_posts": [
+            {"source": "조선일보", "title": "통신보안 잘 됩니까?", "metric": "댓글 704"},
+            {"source": "인스티즈", "title": "apec정상회담 레전드 장면", "metric": "조회수 91,050"}
+          ],
+          "reactions": [
+            "통화스와프 연장 의미 있다",
+            "중국과의 협력 회복 기대"
+          ]
+       },
+       {
+          "issue" : "APEC 폐막",
+          "issue_summary": "한중 정상, 양국 협력과 소통 발전 강조. 통화스와프 연장, 스캠 범죄 대응 공조로 긍정 반응 우세.",
+          "top_posts": [
+            {"source": "조선일보", "title": "통신보안 잘 됩니까?", "metric": "댓글 704"},
+            {"source": "인스티즈", "title": "apec정상회담 레전드 장면", "metric": "조회수 91,050"}
+          ],
+          "reactions": [
+            "통화스와프 연장 의미 있다",
+            "중국과의 협력 회복 기대"
+          ]
+       }
+      ]
+    }
+  ]
+}

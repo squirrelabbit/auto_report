@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ report_title }}</title>
+    <!-- <link rel="stylesheet" href="report.css"> -->
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="header">
+    <div class="header-left">
+        <div class="report-title">{{ report_title }}</div>
+    </div>
+    <div class="header-right">
+        <div class="report-date">{{ report_date }}</div>
+        <div class="report-unit">{{ report_unit }}</div>
+    </div>
+</div>
+
+<!-- NEWS + SNS TOPICS -->
+<div class="two-column">
+
+    <div class="box">
+        <h2 class="box-title">오늘의 뉴스토픽</h2>
+        <table class="topic-table">
+            <thead>
+                <tr>
+                    <th>이슈</th>
+                    <th>언급량</th>
+                    <th>전일 대비</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for t in top_news_topics %}
+                <tr>
+                    <td>{{ t.issue }}</td>
+                    <td>{{ t.count }}</td>
+                    <td>
+                        {% if t.diff < 0 %}
+                            <span style="color:#0066cc;">▼{{ t.diff | abs }}</span>
+                        {% elif t.diff > 0 %}
+                            <span style="color:#cc0000;">▲{{ t.diff }}</span>
+                        {% else %}
+                            <span style="color:#555;">0</span>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="box">
+        <h2 class="box-title">오늘의 SNS 키워드</h2>
+        <table class="topic-table">
+            <thead>
+                <tr>
+                    <th>키워드</th>
+                    <th>언급량</th>
+                    <th>전일 대비</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for t in top_sns_keywords %}
+                <tr>
+                    <td>{{ t.issue }}</td>
+                    <td>{{ t.count }}</td>
+                    <td>
+                        {% if t.diff < 0 %}
+                            <span style="color:#0066cc;">▼{{ t.diff | abs }}</span>
+                        {% elif t.diff > 0 %}
+                            <span style="color:#cc0000;">▲{{ t.diff }}</span>
+                        {% else %}
+                            <span style="color:#555;">0</span>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<!-- MEDIA TOP ISSUES -->
+<div class="section">
+    <h2 class="section-title">매체별 TOP 이슈</h2>
+
+    {% for m in media_top_issues %}
+        <div class="media-row">
+            <span class="media-tag">{{ m.media_type }}</span>
+            <span class="media-title">{{ m.title }}</span>
+            <span class="media-metric">{{ m.metric }}</span>
+        </div>
+    {% endfor %}
+</div>
+
+<!-- POLICY SECTIONS -->
+{% for sec in sections %}
+<div class="policy-section">
+
+    <h2 class="policy-title">{{ sec.section_name }}</h2>
+
+    {% for issue in sec.issues %}
+
+        <!-- Issue 제목 -->
+        <p class="issue">({{ issue.issue }})</p>
+
+        <!-- Issue 요약 -->
+        <p class="summary">
+            {{ issue.issue_summary }}
+        </p>
+
+        <!-- 관심 많은 게시글 -->
+        <div class="sub-box">
+            <h3 class="sub-title">관심 많은 게시글</h3>
+            <ul>
+                {% for p in issue.top_posts %}
+                <li><strong>{{ p.source }}</strong> - {{ p.title }} ({{ p.metric }})</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- 주요 반응 -->
+        <div class="sub-box">
+            <h3 class="sub-title">주요 반응</h3>
+            <ul>
+                {% for r in issue.reactions %}
+                <li>“{{ r }}”</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <hr class="issue-divider">
+
+    {% endfor %}
+</div>
+{% endfor %}
