@@ -184,6 +184,7 @@ python3 main.py
 
 | 파일 | 역할 |
 | --- | --- |
+| `src/api.py` | FastAPI 기반 보고서 생성 API (검증·렌더링·PDF를 HTTP로 제공) |
 | `src/report_ready/assemble.py` | 처리된 레코드를 섹션 중심 보고서 JSON으로 변환 |
 | `src/report_ready/validate_fields.py` | 템플릿 렌더링 전 스키마 검증 |
 | `src/pdf_generator/render_html.py` | Jinja2 템플릿 로딩 및 HTML 렌더링 |
@@ -193,6 +194,29 @@ python3 main.py
 | `summarize/purity_comment.py` | 댓글 군집 정리 및 요약 입력 데이터 준비 |
 | `test/naver_news_light_crawler.py` | 뉴스 기사 수집 실험 |
 | `test/keyword_ner.py`, `test/llm_generate.py` | 토픽 추출, NER, LLM 분류 실험 |
+
+## FastAPI 보고서 API
+
+배치 실행(`main.py`) 외에, 같은 파이프라인을 HTTP API로 호출할 수 있습니다.
+
+```bash
+pip install -r requirements.txt
+cd src
+uvicorn api:app --reload
+```
+
+| 메서드 | 경로 | 역할 |
+| --- | --- | --- |
+| `GET` | `/health` | 서비스 상태 확인 |
+| `POST` | `/reports/validate` | report-ready JSON 스키마 검증 |
+| `POST` | `/reports` | report-ready JSON → PDF 보고서 생성·반환 |
+
+```bash
+curl -X POST http://localhost:8000/reports \
+  -H "Content-Type: application/json" \
+  -d @src/sample_data.json \
+  -o daily_report.pdf
+```
 
 ## 한 줄 요약
 
